@@ -41,7 +41,7 @@ jobs:
 
       - name: Archive certificate
         run: |
-          zip -r cert-${{ secrets.DOMAIN }}.zip certs
+          zip -r cert.zip certs
 
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v2
