@@ -46,8 +46,8 @@ jobs:
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: cert-${{ github.run_number }}
-          name: "SSL Cert - ${{ secrets.DOMAIN }}"
-          files: cert-${{ secrets.DOMAIN }}.zip
+          tag_name: latest
+          name: "SSL—Cert"
+          files: cert.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
