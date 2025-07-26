@@ -1,8 +1,8 @@
 name: Auto SSL Certificate
 
 on:
-  schedule:
-    - cron: '0 0 1,15 * *'  # 每月1日和15日尝试续期
+  # schedule:
+  #   - cron: '0 0 1,15 * *'  # 每月1日和15日尝试续期
   workflow_dispatch:
 
 jobs:
