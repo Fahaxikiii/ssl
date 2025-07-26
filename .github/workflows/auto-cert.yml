@@ -2,22 +2,21 @@ name: Auto SSL Certificate
 
 on:
   schedule:
-    - cron: '0 0 1,15 * *'  # 每月1号、15号尝试续期
+    - cron: '0 0 1,15 * *'  # 每月1日和15日尝试续期
   workflow_dispatch:
 
 jobs:
-  issue-cert:
+  cert:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Install acme.sh
+      - name: Clone acme.sh
         run: |
           git clone https://github.com/acmesh-official/acme.sh.git ~/.acme.sh
-          ~/.acme.sh/acme.sh --install --home ~/.acme.sh --accountemail ${{ secrets.CF_EMAIL }}
-        shell: bash
+          mkdir -p ~/.acme.sh/data
 
       - name: Set DNS credentials
         run: |
@@ -30,7 +29,7 @@ jobs:
             -d ${{ secrets.DOMAIN }} -d "*.${{ secrets.DOMAIN }}" \
             --keylength ec-256 --force
 
-      - name: Install cert to local folder
+      - name: Install certificate to certs/
         run: |
           mkdir -p certs
           ~/.acme.sh/acme.sh --install-cert -d ${{ secrets.DOMAIN }} --ecc \
@@ -38,7 +37,7 @@ jobs:
             --fullchain-file certs/fullchain.pem \
             --ca-file        certs/ca.pem
 
-      - name: Create archive for release
+      - name: Archive certificate
         run: |
           zip -r cert-${{ secrets.DOMAIN }}.zip certs
 
@@ -46,7 +45,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: cert-${{ github.run_number }}
-          name: SSL Cert ${{ secrets.DOMAIN }} # 可改为时间戳
+          name: "SSL Cert - ${{ secrets.DOMAIN }}"
           files: cert-${{ secrets.DOMAIN }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
