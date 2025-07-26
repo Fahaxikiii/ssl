@@ -27,7 +27,9 @@ jobs:
         run: |
           ~/.acme.sh/acme.sh --issue --dns dns_cf \
             -d ${{ secrets.DOMAIN }} -d "*.${{ secrets.DOMAIN }}" \
-            --keylength ec-256 --force
+            --keylength ec-256 \
+            --server letsencrypt \
+            --force
 
       - name: Install certificate to certs/
         run: |
