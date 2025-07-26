@@ -47,7 +47,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
-          name: "SSL—Cert"
+          name: "SSLCert"
           files: cert.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
